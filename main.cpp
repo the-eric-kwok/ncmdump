@@ -274,7 +274,7 @@ process_file(const char *path) {
 	tag->setTitle(TagLib::String(music_name, TagLib::String::UTF8));
 	tag->setArtist(TagLib::String(artist, TagLib::String::UTF8));
 	tag->setAlbum(TagLib::String(album, TagLib::String::UTF8));
-	tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author on1x", TagLib::String::UTF8));
+	tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author 5L", TagLib::String::UTF8));
 
 	audioFile->save();
 
