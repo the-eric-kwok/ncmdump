@@ -47,27 +47,27 @@ aes128_ecb_decrypt(const uint8_t *key, uint8_t *in, int in_len, uint8_t *out) {
 	int temp;
 
 	EVP_CIPHER_CTX x;
-    EVP_CIPHER_CTX_init(&x);
-    EVP_CIPHER_CTX_set_padding(&x, 1);
+	EVP_CIPHER_CTX_init(&x);
+	EVP_CIPHER_CTX_set_padding(&x, 1);
 
-    if (!EVP_DecryptInit_ex(&x, EVP_aes_128_ecb(), 0, key, NULL)) {
-        return -1;
-    }
+	if (!EVP_DecryptInit_ex(&x, EVP_aes_128_ecb(), 0, key, NULL)) {
+		return -1;
+	}
 
-    if (!EVP_DecryptUpdate(&x, out, &outlen, in, in_len))
-    {
-        return -2;
-    }
+	if (!EVP_DecryptUpdate(&x, out, &outlen, in, in_len))
+	{
+		return -2;
+	}
 
-    if (!EVP_DecryptFinal_ex(&x, out + outlen, &temp)) {
-        return -3;
-    }
+	if (!EVP_DecryptFinal_ex(&x, out + outlen, &temp)) {
+		return -3;
+	}
 
-    outlen += temp;
+	outlen += temp;
 
-    EVP_CIPHER_CTX_cleanup(&x);
+	EVP_CIPHER_CTX_cleanup(&x);
 
-    return outlen;
+	return outlen;
 }
 
 uint8_t*
