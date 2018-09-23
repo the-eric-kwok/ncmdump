@@ -1,4 +1,4 @@
-Netease Cloud Music Copyright Protection File Dump for macOS
+Netease Cloud Music Copyright Protection File Dump
 ===========
 
 ## 简介
