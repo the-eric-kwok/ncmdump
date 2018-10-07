@@ -205,7 +205,8 @@ process_file(const char *path) {
 	char filter_music_filename[1024];
 	memset(filter_music_filename, 0, 1024);
 
-	int t, j;
+	int t;
+	int j = 0;
 	char a;
 	for (i = 0; i < 1024; i++)
 	{
