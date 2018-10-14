@@ -17,8 +17,8 @@ Windows GUI应用程序 [ncmdump-gui-release](https://github.com/anonymous5l/ncm
 ## 使用
 	ncmdump [files]...
 
-## 捐赠
+## 微信捐赠
 
 emm 满足某位同学的issues
 
-![wechat-pay](https://raw.githubusercontent.com/anonymous5l/static-resoures/master/wechat-pay.jpg)
+![wechat-pay](https://raw.githubusercontent.com/anonymous5l/static-resoures/master/wechat-pay.png?raw=true)
