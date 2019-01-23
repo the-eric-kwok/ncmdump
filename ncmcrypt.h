@@ -36,6 +36,7 @@ class NeteaseCrypt {
 private:
 	static const unsigned char sCoreKey[17];
 	static const unsigned char sModifyKey[17];
+	static const char mPng[8];
 	enum NcmFormat { MP3, FLAC };
 
 private:
@@ -52,6 +53,7 @@ private:
 	bool openFile(std::string const&);
 	int read(char *s, std::streamsize n);
 	void buildKeyBox(unsigned char *key, int keyLen);
+	std::string mimeType(std::string& data);
 
 public:
 	const std::string& filepath() const { return mFilepath; }

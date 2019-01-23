@@ -15,6 +15,8 @@
 const unsigned char NeteaseCrypt::sCoreKey[17]   = {0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57, 0};
 const unsigned char NeteaseCrypt::sModifyKey[17] = {0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28, 0};
 
+const char NeteaseCrypt::mPng[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
+
 static void aesEcbDecrypt(const unsigned char *key, std::string& src, std::string& dst) {
 	int n, i;
 
@@ -167,6 +169,14 @@ void NeteaseCrypt::buildKeyBox(unsigned char *key, int keyLen) {
 	}
 }
 
+std::string NeteaseCrypt::mimeType(std::string& data) {
+	if (memcmp(data.c_str(), mPng, 8) == 0) {
+		return std::string("image/png");
+	}
+
+	return std::string("image/jpeg");
+}
+
 void NeteaseCrypt::FixMetadata() {
 	if (mDumpFilepath.length() <= 0) {
 		throw std::invalid_argument("must dump before");
@@ -183,7 +193,7 @@ void NeteaseCrypt::FixMetadata() {
 		if (mImageData.length() > 0) {
 			TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame;
 
-			frame->setMimeType("image/jpeg");
+			frame->setMimeType(mimeType(mImageData));
 			frame->setPicture(vector);
 
 			dynamic_cast<TagLib::ID3v2::Tag*>(tag)->addFrame(frame);
@@ -194,7 +204,7 @@ void NeteaseCrypt::FixMetadata() {
 
 		if (mImageData.length() > 0) {
 			TagLib::FLAC::Picture *cover = new TagLib::FLAC::Picture;
-			cover->setMimeType("image/jpeg");
+			cover->setMimeType(mimeType(mImageData));
 			cover->setType(TagLib::FLAC::Picture::FrontCover);
 			cover->setData(vector);
 
@@ -215,24 +225,25 @@ void NeteaseCrypt::FixMetadata() {
 
 void NeteaseCrypt::Dump() {
 	int n, i;
-	mDumpFilepath.clear();
-	mDumpFilepath.resize(1024);
 
-	if (mMetaData) {
-		mDumpFilepath = mMetaData->name();
+	// mDumpFilepath.clear();
+	// mDumpFilepath.resize(1024);
 
-		replace(mDumpFilepath, "\\", "＼");
-		replace(mDumpFilepath, "/", "／");
-		replace(mDumpFilepath, "?", "？");
-		replace(mDumpFilepath, ":", "：");
-		replace(mDumpFilepath, "*", "＊");
-		replace(mDumpFilepath, "\"", "＂");
-		replace(mDumpFilepath, "<", "＜");
-		replace(mDumpFilepath, ">", "＞");
-		replace(mDumpFilepath, "|", "｜");
-	} else {
-		mDumpFilepath = fileNameWithoutExt(mFilepath);
-	}
+	// if (mMetaData) {
+	// 	mDumpFilepath = mMetaData->name();
+
+	// 	replace(mDumpFilepath, "\\", "＼");
+	// 	replace(mDumpFilepath, "/", "／");
+	// 	replace(mDumpFilepath, "?", "？");
+	// 	replace(mDumpFilepath, ":", "：");
+	// 	replace(mDumpFilepath, "*", "＊");
+	// 	replace(mDumpFilepath, "\"", "＂");
+	// 	replace(mDumpFilepath, "<", "＜");
+	// 	replace(mDumpFilepath, ">", "＞");
+	// 	replace(mDumpFilepath, "|", "｜");
+	// } else {
+	mDumpFilepath = fileNameWithoutExt(mFilepath);
+	// }
 
 	n = 0x8000;
 	i = 0;
