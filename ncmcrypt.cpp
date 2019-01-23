@@ -174,26 +174,25 @@ void NeteaseCrypt::FixMetadata() {
 
 	TagLib::File *audioFile;
 	TagLib::Tag *tag;
+	TagLib::ByteVector vector(mImageData.c_str(), mImageData.length());
 
-	if (mImageData.length() > 0) {
-		TagLib::ByteVector vector(mImageData.c_str(), mImageData.length());
+	if (mFormat == NeteaseCrypt::MP3) {
+		audioFile = new TagLib::MPEG::File(mDumpFilepath.c_str());
+		tag = dynamic_cast<TagLib::MPEG::File*>(audioFile)->ID3v2Tag(true);
 
-		if (mFormat == NeteaseCrypt::MP3) {
-			audioFile = new TagLib::MPEG::File(mDumpFilepath.c_str());
-
-			tag = dynamic_cast<TagLib::MPEG::File*>(audioFile)->ID3v2Tag(true);
-
+		if (mImageData.length() > 0) {
 			TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame;
 
 			frame->setMimeType("image/jpeg");
 			frame->setPicture(vector);
 
 			dynamic_cast<TagLib::ID3v2::Tag*>(tag)->addFrame(frame);
-		} else if (mFormat == NeteaseCrypt::FLAC) {
-			audioFile = new TagLib::FLAC::File(mDumpFilepath.c_str());
+		}
+	} else if (mFormat == NeteaseCrypt::FLAC) {
+		audioFile = new TagLib::FLAC::File(mDumpFilepath.c_str());
+		tag = audioFile->tag();
 
-			tag = audioFile->tag();
-
+		if (mImageData.length() > 0) {
 			TagLib::FLAC::Picture *cover = new TagLib::FLAC::Picture;
 			cover->setMimeType("image/jpeg");
 			cover->setType(TagLib::FLAC::Picture::FrontCover);
@@ -320,7 +319,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 	read(reinterpret_cast<char *>(&n), sizeof(n));
 
 	if (n <= 0) {
-		printf("[Warn] `%s` missing metadata infomation maybe can't fix some infomation!\n", path.c_str());
+		printf("[Warn] `%s` missing metadata infomation can't fix some infomation!\n", path.c_str());
 
 		mMetaData = NULL;
 	} else {
@@ -362,5 +361,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 		read(imageData, n);
 
 		mImageData = std::string(imageData, n);
+	} else {
+		printf("[Warn] `%s` missing album can't fix album image!\n", path.c_str());
 	}
 }
