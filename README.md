@@ -19,6 +19,14 @@ Android版本 [DroidNCM](https://github.com/bunnyblueair/DroidNCM)
 
 ## 依赖库
 	* taglib
+	
+## 编译
+macOS下：
+1. 安装taglib
+
+	`brew install taglib`
+
+2. `make install`
 
 ## 使用
 	ncmdump [files]...
